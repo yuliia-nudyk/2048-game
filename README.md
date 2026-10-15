@@ -10,11 +10,12 @@ A classic 2048 game built from scratch with vanilla JavaScript, without any fram
 
 ## 📝 Description
 
-The game implements the classic 2048 mechanics: moving tiles around a 4×4 board using arrow keys, merging tiles with the same value, tracking the score, and saving the best score between sessions.
+The game implements the classic 2048 mechanics: moving tiles around a 4×4 board using arrow keys or swipe gestures on touch devices, merging tiles with the same value, tracking the score, and saving the best score between sessions.
 
 ### Features
 
 - Arrow key controls (↑ ↓ ← →)
+- Swipe controls for touch devices
 - Merging tiles with the same value, with a smooth merge animation
 - Current score tracking and best score persistence via localStorage
 - A win message when a tile reaches 2048 (the game can still be continued afterwards)
@@ -66,12 +67,12 @@ This will launch the project via Parcel, which automatically compiles SCSS to CS
 
 ## 🕹 Controls
 
-| Key | Action |
+| Input | Action |
 |---|---|
-| `↑` | Move tiles up |
-| `↓` | Move tiles down |
-| `←` | Move tiles left |
-| `→` | Move tiles right |
+| `↑` / swipe up | Move tiles up |
+| `↓` / swipe down | Move tiles down |
+| `←` / swipe left | Move tiles left |
+| `→` / swipe right | Move tiles right |
 
 ## 📂 Project structure
 ```

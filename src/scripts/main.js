@@ -4,6 +4,7 @@
 const fieldSize = 4;
 const winValue = 2048;
 const animationDuration = 150;
+const swipeThreshold = 30; // min swipe distance in px
 
 // sign and axis used to calculate the CSS transform for each move direction
 const directionParams = {
@@ -28,6 +29,7 @@ const directionParams = {
 // #endregion
 
 // #region DOM Elements
+const field = document.querySelector('.game-field');
 const scores = document.querySelector('.game-score');
 const bestScores = document.querySelector('.best-score');
 const button = document.querySelector('.button');
@@ -77,30 +79,69 @@ function restartGame() {
 
 // #endregion
 
-// #region keyboard controls
+// #region moves handling
 
-document.addEventListener('keydown', e => {
-  let hasMoved = false;
+const moves = {
+  up: goUp, down: goDown, left: goLeft, right: goRight,
+};
 
-  switch (e.key) {
-    case 'ArrowDown':
-      hasMoved = goDown();
-      break;
-    case 'ArrowUp':
-      hasMoved = goUp();
-      break;
-    case 'ArrowRight':
-      hasMoved = goRight();
-      break;
-    case 'ArrowLeft':
-      hasMoved = goLeft();
-      break;
-  }
+function handleMove(direction) {
+  const hasMoved = moves[direction]();
 
   if (hasMoved) {
     setTimeout(() => {
       addCard();
     }, animationDuration);
+  }
+}
+
+// #endregion
+
+// #region keyboard controls
+
+const keyDirections = {
+  ArrowUp: 'up',
+  ArrowDown: 'down',
+  ArrowLeft: 'left',
+  ArrowRight: 'right',
+};
+
+document.addEventListener('keydown', e => {
+  const direction = keyDirections[e.key];
+
+  if (direction) {
+    e.preventDefault();
+    handleMove(direction);
+  }
+});
+
+// #endregion
+
+// #region swipe controls
+
+let touchStartX = 0;
+let touchStartY = 0;
+
+field.addEventListener('touchstart', e => {
+  const touch = e.changedTouches[0];
+
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+}, { passive: true });
+
+field.addEventListener('touchend', e => {
+  const touch = e.changedTouches[0];
+  const dx = touch.clientX - touchStartX;
+  const dy = touch.clientY - touchStartY;
+
+  if (Math.max(Math.abs(dx), Math.abs(dy)) < swipeThreshold) {
+    return;
+  }
+
+  if (Math.abs(dx) > Math.abs(dy)) {
+    handleMove(dx > 0 ? 'right' : 'left');
+  } else {
+    handleMove(dy > 0 ? 'down' : 'up');
   }
 });
 
